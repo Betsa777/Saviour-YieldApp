@@ -239,7 +239,7 @@ async function repay() {
     //  if (!borrower || borrower !== borrowerPkh) return false;
     console.log(u.assets.lovelace);
     const totalRepayment = BigInt(d.fields[2]) + BigInt(d.fields[3]);
-    if (u.assets.lovelace > totalRepayment)
+    if (u.assets.lovelace >= totalRepayment)
       // Must be a full loan UTxO (5 ADA principal)
       return u.datum;
   });
