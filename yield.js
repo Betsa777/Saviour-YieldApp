@@ -330,6 +330,8 @@ async function distributeYield() {
 
       console.log("lovelace amount ", u.assets.lovelace);
       console.log("amount to distribute ", BigInt(principal) + BigInt(interest));
+      console.log("yield share ", d.fields[4]);
+
     }
 
 
