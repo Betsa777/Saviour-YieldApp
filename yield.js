@@ -315,7 +315,7 @@ async function distributeYield() {
     lucid.utils.getAddressDetails(lenderAddr).paymentCredential.hash;
   console.log({ lenderPkh });
   const utxos = await lucid.utxosAt(scriptAddress);
-  if (utxos.length === 0) return log("No loans found");
+  // if (utxos.length === 0) return log("No loans found");
 
   const loanUtxo = utxos.find((u) => {
     if (!u.datum) return false;
@@ -334,7 +334,8 @@ async function distributeYield() {
 
     return (
       borrower && borrower.fields !== undefined && borrower.fields.length > 0
-      && lenderPkh === lenderDPkh && u.assets.lovelace >= BigInt(d.fields[4])
+      && lenderPkh === lenderDPkh
+      // && u.assets.lovelace >= BigInt(d.fields[4])
     );
   });
   console.log("loanUtxo", loanUtxo);
