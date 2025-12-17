@@ -249,7 +249,7 @@ async function repay() {
     return log("No repayable loan found for this wallet");
   }
   const userGoodUTxo = userUtxos.find((u) => {
-    const d = loanUtxo.datum
+    const d = Data.from(loanUtxo.datum)
     const totalRepayment = BigInt(d.fields[2]) + BigInt(d.fields[3]);
 
 
