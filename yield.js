@@ -219,6 +219,7 @@ async function repay() {
 
   const utxos = await lucid.utxosAt(scriptAddress);
   const userUtxos = await lucid.wallet.getUtxos()
+
   console.log("utxo", utxos);
 
   // ✅ Find ONLY the loan owned by this borrower
@@ -239,9 +240,18 @@ async function repay() {
     //  if (!borrower || borrower !== borrowerPkh) return false;
     console.log(u.assets.lovelace);
     const totalRepayment = BigInt(d.fields[2]) + BigInt(d.fields[3]);
-    if (u.assets.lovelace >= totalRepayment)
-      // Must be a full loan UTxO (5 ADA principal)
-      return u.datum;
+    // if (u.assets.lovelace >= totalRepayment)
+    // Must be a full loan UTxO (5 ADA principal)
+    return u.datum;
+  });
+  const userGoodUTxo = userUtxos.find((u) => {
+    const d = loanUtxo.datum
+    const totalRepayment = BigInt(d.fields[2]) + BigInt(d.fields[3]);
+
+
+    // if (u.assets.lovelace >= totalRepayment)
+    // Must be a full loan UTxO (5 ADA principal)
+    return u.assets.lovelace >= totalRepayment;
   });
   console.log("load Utxo", loanUtxo);
   if (!loanUtxo) {
@@ -282,7 +292,7 @@ async function repay() {
   const amount = loanUtxo.assets.lovelace + totalRepayment
   const tx = await lucid
     .newTx()
-    .collectFrom(userUtxos)
+    .collectFrom([userGoodUTxo])
     .collectFrom([loanUtxo], redeemerRepay(totalRepayment))
     .attachSpendingValidator(script)
 
@@ -338,7 +348,7 @@ async function distributeYield() {
     return (
       borrower && borrower.fields !== undefined && borrower.fields.length > 0
       && lenderPkh === lenderDPkh
-      // && u.assets.lovelace >= BigInt(principal) + BigInt(interest)
+      && u.assets.lovelace >= BigInt(principal) + BigInt(interest)
     );
   });
   console.log("loanUtxo", loanUtxo);
