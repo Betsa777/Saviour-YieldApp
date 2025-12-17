@@ -279,7 +279,7 @@ async function repay() {
     interest,
     yieldShare
   );
-
+  const amount = loanUtxo.assets.lovelace + totalRepayment
   const tx = await lucid
     .newTx()
     .collectFrom(userUtxos)
@@ -291,7 +291,8 @@ async function repay() {
       scriptAddress,
       { inline: resetDatum },
       // { lovelace: 5_000_000n + repayAmt }
-      { lovelace: totalRepayment }
+      // { lovelace: totalRepayment }
+      { lovelace: amount }
     )
 
     .addSignerKey(borrowerPkh)
