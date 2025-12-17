@@ -306,8 +306,8 @@ async function repay() {
    =============================== */
 
 async function distributeYield() {
-  let yieldAmt = BigInt(document.getElementById("yieldAmt").value);
-  yieldAmt = yieldAmt * 1_000_000n
+  // let yieldAmt = BigInt(document.getElementById("yieldAmt").value);
+  // yieldAmt = yieldAmt * 1_000_000n
   const lenderAddr = await lucid.wallet.address();
   const lenderPkh =
     lucid.utils.getAddressDetails(lenderAddr).paymentCredential.hash;
