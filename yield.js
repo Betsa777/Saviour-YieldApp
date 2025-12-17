@@ -218,6 +218,7 @@ async function repay() {
     lucid.utils.getAddressDetails(walletAddress).paymentCredential.hash;
 
   const utxos = await lucid.utxosAt(scriptAddress);
+  const userUtxos = await lucid.wallet.getUtxos()
   console.log("utxo", utxos);
 
   // ✅ Find ONLY the loan owned by this borrower
@@ -279,6 +280,7 @@ async function repay() {
 
   const tx = await lucid
     .newTx()
+    .collectFrom(userUtxos)
     .collectFrom([loanUtxo], redeemerRepay(repayAmt))
     .attachSpendingValidator(script)
 
