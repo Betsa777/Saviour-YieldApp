@@ -211,8 +211,8 @@ async function borrow() {
 
 async function repay() {
   //modify
-  let repayAmt = BigInt(document.getElementById("repayAmt").value);
-  repayAmt = repayAmt * 1_000_000n
+  // let repayAmt = BigInt(document.getElementById("repayAmt").value);
+  // repayAmt = repayAmt * 1_000_000n
 
   const borrowerPkh =
     lucid.utils.getAddressDetails(walletAddress).paymentCredential.hash;
@@ -281,7 +281,7 @@ async function repay() {
   const tx = await lucid
     .newTx()
     .collectFrom(userUtxos)
-    .collectFrom([loanUtxo], redeemerRepay(repayAmt))
+    .collectFrom([loanUtxo], redeemerRepay(totalRepayment))
     .attachSpendingValidator(script)
 
     // borrower pays into script
@@ -289,7 +289,7 @@ async function repay() {
       scriptAddress,
       { inline: resetDatum },
       // { lovelace: 5_000_000n + repayAmt }
-      { lovelace: interest + repayAmt }
+      { lovelace: totalRepayment }
     )
 
     .addSignerKey(borrowerPkh)
