@@ -257,7 +257,7 @@ async function repay() {
   console.log({ interest })
   // console.log({ repayAmt });
 
-  if (repayAmt < totalRepayment) {
+  if (loanUtxo.assets.lovelace < totalRepayment) {
     return log("Repayment must cover principal + interest");
   }
 
