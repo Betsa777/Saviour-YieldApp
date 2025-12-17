@@ -89,7 +89,8 @@ async function deposit() {
   const datum = mkYieldDatum(
     pkh,
     Nothing, // ✅ NO borrower at deposit
-    5_000_000,
+    // 5_000_000,
+    depositAmount,
     500_000,
     70
   );
@@ -153,9 +154,9 @@ async function borrow() {
   }
 
   // ❌ lender cannot borrow own loan
-  // if (lender === borrowerPkh) {
-  //   return log("Lender cannot borrow own funds");
-  // }
+  if (lender === borrowerPkh) {
+    return log("Lender cannot borrow own funds");
+  }
 
   // ✅ Lock borrower in datum
   const newDatum = mkYieldDatum(
@@ -320,6 +321,9 @@ async function distributeYield() {
     const interest = d.fields[3];
     if (lenderDPkh === lenderPkh)
       console.log(d.fields);
+
+    console.log("lovelace amount ", u.assets.lovelace);
+    console.log("amount to distribute ", BigInt(principal) + BigInt(interest));
 
     return (
       borrower && borrower.fields !== undefined && borrower.fields.length > 0
