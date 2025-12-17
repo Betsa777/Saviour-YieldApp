@@ -315,7 +315,7 @@ async function distributeYield() {
     lucid.utils.getAddressDetails(lenderAddr).paymentCredential.hash;
   console.log({ lenderPkh });
   const utxos = await lucid.utxosAt(scriptAddress);
-  // if (utxos.length === 0) return log("No loans found");
+  if (utxos.length === 0) return log("No loans found");
 
   const loanUtxo = utxos.find((u) => {
     if (!u.datum) return false;
@@ -334,8 +334,7 @@ async function distributeYield() {
 
     return (
       borrower && borrower.fields !== undefined && borrower.fields.length > 0
-      && lenderPkh === lenderDPkh
-      // && u.assets.lovelace >= BigInt(d.fields[4])
+      && lenderPkh === lenderDPkh && u.assets.lovelace >= BigInt(principal) + BigInt(interest)
     );
   });
   console.log("loanUtxo", loanUtxo);
@@ -349,23 +348,18 @@ async function distributeYield() {
   console.log({ borrowerPkh })
   console.log({ borrowerMaybe })
 
-  //
-  const adaAmount = 2_000_000n
-  // const lenderShare = (loanUtxo.assets.lovelace * BigInt(yieldShare)) / 100n;
-  // const borrowerShare = loanUtxo.assets.lovelace - lenderShare;
-  const lenderShare = (adaAmount * BigInt(yieldShare)) / 100n;
-  const borrowerShare = adaAmount - lenderShare;
 
+  const lenderShare = (loanUtxo.assets.lovelace * BigInt(yieldShare)) / 100n;
+  const borrowerShare = loanUtxo.assets.lovelace - lenderShare;
   const userUtxos = await lucid.wallet.getUtxos()
   const borrowerAddr = lucid.utils.credentialToAddress({
     type: "Key",
     hash: borrowerPkh,
   });
-  //2_000_000n
+
   const tx = await lucid
     .newTx()
-    // .collectFrom([loanUtxo], redeemerYield(yieldShare))
-    .collectFrom([loanUtxo], redeemerYield(adaAmount))
+    .collectFrom([loanUtxo], redeemerYield(yieldShare))
     .collectFrom(userUtxos)
     .attachSpendingValidator(script)
     .payToAddress(lenderAddr, { lovelace: lenderShare })
