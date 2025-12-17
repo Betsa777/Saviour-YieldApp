@@ -345,8 +345,8 @@ async function distributeYield() {
   console.log({ borrowerMaybe })
 
 
-  const lenderShare = (yieldAmt * BigInt(yieldShare)) / 100n;
-  const borrowerShare = yieldAmt - lenderShare;
+  const lenderShare = (loanUtxo.assets.lovelace * BigInt(yieldShare)) / 100n;
+  const borrowerShare = loanUtxo.assets.lovelace - lenderShare;
 
   const borrowerAddr = lucid.utils.credentialToAddress({
     type: "Key",
@@ -355,7 +355,7 @@ async function distributeYield() {
 
   const tx = await lucid
     .newTx()
-    .collectFrom([loanUtxo], redeemerYield(yieldAmt))
+    .collectFrom([loanUtxo], redeemerYield(yieldShare))
     .attachSpendingValidator(script)
     .payToAddress(lenderAddr, { lovelace: lenderShare })
     .payToAddress(borrowerAddr, { lovelace: borrowerShare })
