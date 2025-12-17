@@ -338,7 +338,7 @@ async function distributeYield() {
     return (
       borrower && borrower.fields !== undefined && borrower.fields.length > 0
       && lenderPkh === lenderDPkh
-      && u.assets.lovelace >= BigInt(principal) + BigInt(interest)
+      // && u.assets.lovelace >= BigInt(principal) + BigInt(interest)
     );
   });
   console.log("loanUtxo", loanUtxo);
@@ -363,7 +363,7 @@ async function distributeYield() {
 
   const tx = await lucid
     .newTx()
-    .collectFrom([loanUtxo], redeemerYield(yieldShare))
+    .collectFrom([loanUtxo], redeemerYield(loanUtxo.assets.lovelace))
     .collectFrom(userUtxos)
     .attachSpendingValidator(script)
     .payToAddress(lenderAddr, { lovelace: lenderShare })
