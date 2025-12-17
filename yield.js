@@ -324,11 +324,13 @@ async function distributeYield() {
     const borrower = d.fields[1];
     const principal = d.fields[2];
     const interest = d.fields[3];
-    if (lenderDPkh === lenderPkh)
+    if (lenderDPkh === lenderPkh) {
       console.log(d.fields);
 
-    console.log("lovelace amount ", u.assets.lovelace);
-    console.log("amount to distribute ", BigInt(principal) + BigInt(interest));
+      console.log("lovelace amount ", u.assets.lovelace);
+      console.log("amount to distribute ", BigInt(principal) + BigInt(interest));
+    }
+
 
     return (
       borrower && borrower.fields !== undefined && borrower.fields.length > 0
@@ -349,7 +351,7 @@ async function distributeYield() {
 
   const lenderShare = (loanUtxo.assets.lovelace * BigInt(yieldShare)) / 100n;
   const borrowerShare = loanUtxo.assets.lovelace - lenderShare;
-
+  const userUtxos = await lucid.wallet.getUtxos()
   const borrowerAddr = lucid.utils.credentialToAddress({
     type: "Key",
     hash: borrowerPkh,
@@ -358,6 +360,7 @@ async function distributeYield() {
   const tx = await lucid
     .newTx()
     .collectFrom([loanUtxo], redeemerYield(yieldShare))
+    .collectFrom(userUtxos)
     .attachSpendingValidator(script)
     .payToAddress(lenderAddr, { lovelace: lenderShare })
     .payToAddress(borrowerAddr, { lovelace: borrowerShare })
