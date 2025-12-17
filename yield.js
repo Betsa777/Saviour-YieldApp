@@ -308,9 +308,8 @@ async function repay() {
       walletAddress,
       // { lovelace: 5_000_000n + repayAmt }
       // { lovelace: totalRepayment }
-      { lovelace: -totalRepayment }
+      { lovelace: BigInt(userGoodUTxo.assets.lovelace) - totalRepayment }
     )
-
     .addSignerKey(borrowerPkh)
     .complete();
 
