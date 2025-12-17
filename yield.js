@@ -337,7 +337,8 @@ async function distributeYield() {
 
     return (
       borrower && borrower.fields !== undefined && borrower.fields.length > 0
-      && lenderPkh === lenderDPkh && u.assets.lovelace >= BigInt(principal) + BigInt(interest)
+      && lenderPkh === lenderDPkh
+      // && u.assets.lovelace >= BigInt(principal) + BigInt(interest)
     );
   });
   console.log("loanUtxo", loanUtxo);
