@@ -255,7 +255,7 @@ async function repay() {
   console.log({ totalRepayment })
   console.log({ principal })
   console.log({ interest })
-  console.log({ repayAmt });
+  // console.log({ repayAmt });
 
   if (repayAmt < totalRepayment) {
     return log("Repayment must cover principal + interest");
