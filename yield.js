@@ -302,7 +302,13 @@ async function repay() {
       { inline: resetDatum },
       // { lovelace: 5_000_000n + repayAmt }
       // { lovelace: totalRepayment }
-      { lovelace: amount }
+      { lovelace: totalRepayment }
+    )
+    .payToAddress(
+      walletAddress,
+      // { lovelace: 5_000_000n + repayAmt }
+      // { lovelace: totalRepayment }
+      { lovelace: -totalRepayment }
     )
 
     .addSignerKey(borrowerPkh)
