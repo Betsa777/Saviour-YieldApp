@@ -110,6 +110,7 @@ async function deposit() {
    =============================== */
 
 async function borrow() {
+  await initLucid()
   let borrowAmt = BigInt(document.getElementById("borrowAmt").value);
   borrowAmt = borrowAmt * 1_000_000n
   console.log({ borrowAmt });
@@ -318,7 +319,8 @@ async function distributeYield() {
     const borrower = d.fields[1];
     const principal = d.fields[2];
     const interest = d.fields[3];
-    console.log(d.fields);
+    if (lenderDPkh === lenderPkh)
+      console.log(d.fields);
 
     return (
       borrower && borrower.fields !== undefined && borrower.fields.length > 0
