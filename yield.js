@@ -349,18 +349,23 @@ async function distributeYield() {
   console.log({ borrowerPkh })
   console.log({ borrowerMaybe })
 
+  //
+  const adaAmount = 2_000_000n
+  // const lenderShare = (loanUtxo.assets.lovelace * BigInt(yieldShare)) / 100n;
+  // const borrowerShare = loanUtxo.assets.lovelace - lenderShare;
+  const lenderShare = (adaAmount * BigInt(yieldShare)) / 100n;
+  const borrowerShare = adaAmount - lenderShare;
 
-  const lenderShare = (loanUtxo.assets.lovelace * BigInt(yieldShare)) / 100n;
-  const borrowerShare = loanUtxo.assets.lovelace - lenderShare;
   const userUtxos = await lucid.wallet.getUtxos()
   const borrowerAddr = lucid.utils.credentialToAddress({
     type: "Key",
     hash: borrowerPkh,
   });
-
+  //2_000_000n
   const tx = await lucid
     .newTx()
-    .collectFrom([loanUtxo], redeemerYield(yieldShare))
+    // .collectFrom([loanUtxo], redeemerYield(yieldShare))
+    .collectFrom([loanUtxo], redeemerYield(adaAmount))
     .collectFrom(userUtxos)
     .attachSpendingValidator(script)
     .payToAddress(lenderAddr, { lovelace: lenderShare })
