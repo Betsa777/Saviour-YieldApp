@@ -244,6 +244,10 @@ async function repay() {
     // Must be a full loan UTxO (5 ADA principal)
     return u.datum;
   });
+  console.log("load Utxo", loanUtxo);
+  if (!loanUtxo) {
+    return log("No repayable loan found for this wallet");
+  }
   const userGoodUTxo = userUtxos.find((u) => {
     const d = loanUtxo.datum
     const totalRepayment = BigInt(d.fields[2]) + BigInt(d.fields[3]);
@@ -253,10 +257,7 @@ async function repay() {
     // Must be a full loan UTxO (5 ADA principal)
     return u.assets.lovelace >= totalRepayment;
   });
-  console.log("load Utxo", loanUtxo);
-  if (!loanUtxo) {
-    return log("No repayable loan found for this wallet");
-  }
+
 
 
 
