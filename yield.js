@@ -314,7 +314,6 @@ async function distributeYield() {
   const loanUtxo = utxos.find((u) => {
     if (!u.datum) return false;
     const d = Data.from(u.datum);
-    console.log("datum", d);
     const lenderDPkh = d.fields[0]
     const borrower = d.fields[1];
     const principal = d.fields[2];
