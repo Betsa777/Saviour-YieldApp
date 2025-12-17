@@ -135,7 +135,7 @@ async function borrow() {
     return (
       u.assets.lovelace >= borrowAmt
       && d.fields[1].fields.length == 0
-      && d.fields[1].fields[0] !== borrowerPkh
+      && d.fields[0] !== borrowerPkh
     );
   });
 
